@@ -1,0 +1,26 @@
+version: v1
+name: buf.build/mychain/mychain
+deps:
+  - buf.build/cosmos/cosmos-sdk:v0.50.0
+  - buf.build/cosmos/cosmos-proto
+  - buf.build/cosmos/gogo-proto
+  - buf.build/googleapis/googleapis
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
+    - COMMENTS
+  except:
+    - COMMENT_FIELD
+    - COMMENT_MESSAGE
+    - COMMENT_RPC
+    - COMMENT_SERVICE
+    - COMMENT_ENUM
+    - COMMENT_ENUM_VALUE
+    - COMMENT_ONEOF
+    - SERVICE_SUFFIX
+    - RPC_REQUEST_STANDARD_NAME
+    - RPC_RESPONSE_STANDARD_NAME
+    - RPC_REQUEST_RESPONSE_UNIQUE

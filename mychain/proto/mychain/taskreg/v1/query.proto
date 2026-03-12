@@ -1,0 +1,35 @@
+syntax = "proto3";
+package mychain.taskreg.v1;
+
+option go_package = "poc-cometbft/mychain/x/taskreg/types";
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "mychain/taskreg/v1/types.proto";
+
+service Query {
+  rpc Task(QueryTaskRequest) returns (QueryTaskResponse) {
+    option (google.api.http).get = "/mychain/taskreg/v1/task/{id}";
+  }
+  rpc ListTasks(QueryListTasksRequest) returns (QueryListTasksResponse) {
+    option (google.api.http).get = "/mychain/taskreg/v1/tasks";
+  }
+}
+
+message QueryTaskRequest {
+  uint64 id = 1;
+}
+
+message QueryTaskResponse {
+  Task task = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryListTasksRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryListTasksResponse {
+  repeated Task tasks = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

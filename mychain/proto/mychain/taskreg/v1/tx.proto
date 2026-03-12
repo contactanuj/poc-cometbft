@@ -1,0 +1,46 @@
+syntax = "proto3";
+package mychain.taskreg.v1;
+
+option go_package = "poc-cometbft/mychain/x/taskreg/types";
+
+import "cosmos/msg/v1/msg.proto";
+import "gogoproto/gogo.proto";
+
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  rpc CreateTask(MsgCreateTask) returns (MsgCreateTaskResponse);
+  rpc AssignTask(MsgAssignTask) returns (MsgAssignTaskResponse);
+  rpc CompleteTask(MsgCompleteTask) returns (MsgCompleteTaskResponse);
+}
+
+message MsgCreateTask {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1;
+  string title = 2;
+  string description = 3;
+}
+
+message MsgCreateTaskResponse {
+  uint64 id = 1;
+}
+
+message MsgAssignTask {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator = 1;
+  uint64 task_id = 2;
+  string assignee = 3;
+}
+
+message MsgAssignTaskResponse {}
+
+message MsgCompleteTask {
+  option (cosmos.msg.v1.signer) = "assignee";
+
+  string assignee = 1;
+  uint64 task_id = 2;
+}
+
+message MsgCompleteTaskResponse {}

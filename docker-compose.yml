@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  mychain-node:
+    build:
+      context: ./mychain
+      dockerfile: Dockerfile
+    container_name: mychain-node
+    ports:
+      - "26657:26657"   # CometBFT RPC
+      - "9090:9090"     # gRPC
+      - "1317:1317"     # REST API
+      - "26656:26656"   # P2P
+    volumes:
+      - mychain-data:/root/.mychain
+    environment:
+      - CHAIN_ID=mychain-1
+      - MONIKER=mychain-node
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:26657/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    networks:
+      - cometbft-net
+
+  abci-kvstore:
+    build:
+      context: ./abci-kvstore
+      dockerfile: Dockerfile
+    container_name: abci-kvstore
+    ports:
+      - "36657:36657"   # CometBFT RPC for kvstore
+    volumes:
+      - abci-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:36657/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    networks:
+      - cometbft-net
+
+  api-backend:
+    build:
+      context: .
+      dockerfile: api-backend/Dockerfile
+    container_name: api-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - CHAIN_GRPC_ADDR=mychain-node:9090
+      - CHAIN_RPC_ADDR=http://mychain-node:26657
+      - KVSTORE_RPC_ADDR=http://abci-kvstore:36657
+      - CHAIN_ID=mychain-1
+      - WASM_CODE_ID=1
+      - TEST_MNEMONIC=abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+      - PORT=8080
+    depends_on:
+      mychain-node:
+        condition: service_healthy
+      abci-kvstore:
+        condition: service_healthy
+    networks:
+      - cometbft-net
+
+volumes:
+  mychain-data:
+  abci-data:
+
+networks:
+  cometbft-net:
+    driver: bridge

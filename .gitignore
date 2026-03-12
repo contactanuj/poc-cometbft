@@ -1,0 +1,52 @@
+# Go build artifacts
+/mychain/build/
+/abci-kvstore/kvstore-app
+/api-backend/api-backend
+
+# Rust build artifacts
+**/target/
+
+# Contract compiled artifacts (built via optimizer)
+/contracts/**/artifacts/*.wasm
+
+# Go vendor (dependencies downloaded locally)
+vendor/
+
+# Go workspace sum
+go.work.sum
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Chain data (local runs)
+data/
+*.db/
+.mychain/
+
+# Docker volumes (local)
+docker-data/
+
+# Logs
+*.log
+
+# Test coverage
+coverage.out
+coverage.html
+
+# Temporary files
+tmp/
+*.tmp

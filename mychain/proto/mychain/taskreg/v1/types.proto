@@ -1,0 +1,22 @@
+syntax = "proto3";
+package mychain.taskreg.v1;
+
+option go_package = "poc-cometbft/mychain/x/taskreg/types";
+
+import "gogoproto/gogo.proto";
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_OPEN = 1;
+  TASK_STATUS_ASSIGNED = 2;
+  TASK_STATUS_COMPLETED = 3;
+}
+
+message Task {
+  uint64 id = 1;
+  string title = 2;
+  string description = 3;
+  string creator = 4 [(gogoproto.moretags) = "yaml:\"creator\""];
+  string assignee = 5 [(gogoproto.moretags) = "yaml:\"assignee\""];
+  TaskStatus status = 6;
+}

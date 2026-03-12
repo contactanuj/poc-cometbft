@@ -1,0 +1,12 @@
+syntax = "proto3";
+package mychain.taskreg.v1;
+
+option go_package = "poc-cometbft/mychain/x/taskreg/types";
+
+import "gogoproto/gogo.proto";
+import "mychain/taskreg/v1/types.proto";
+
+message GenesisState {
+  repeated Task tasks = 1 [(gogoproto.nullable) = false];
+  uint64 next_task_id = 2;
+}
